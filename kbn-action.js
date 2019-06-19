@@ -3,8 +3,7 @@
 'use strict'
 
 module.exports = {
-  main,
-  kbnAction
+  main
 }
 
 const meow = require('meow')
@@ -25,6 +24,7 @@ async function main () {
   if (flags.help) args.showHelp()
   if (flags.version) args.showVersion()
 
+  const urlBase = flags.urlBase.replace(/\/+$/, '')
   const [ command, id, ...rest ] = input
 
   debugLog(`command: ${command} id: ${id}`)
@@ -35,7 +35,21 @@ async function main () {
     logError(`unknown command: ${command}`)
   }
 
-  commands[command](id, rest, )
+  const opts = { debugLog }
+  let result
+  try {
+    result = await commands[command](urlBase, id, rest, opts)
+  } catch (err) {
+    if (err.response == null) logError(err.stack)
+
+    result = err.response
+  }
+
+  if (result.statusCode !== 200) {
+    logError(`status code ${result.statusCode}\nbody: ${JSON.stringify(result.body, null, 4)}`)
+  }
+
+  console.log(JSON.stringify(result.body, null, 4))
 }
 
 function logError (message) {
@@ -47,26 +61,24 @@ function getDebugLog () {
   if (process.env.DEBUG == null) return () => {}
 
   return function debugLog (message) {
+    if (typeof message === 'object') message = JSON.stringify(message)
     console.log(`${pkg.name}: ${message}`)
   }
 }
 
 // returns parsed args from meow
 function parseArgs () {
+  const defaultUrlBase = process.env.KBN_ACTION_URLBASE || 'http://localhost:5601'
   const meowOptions = {
     help: getHelpText(),
     flags: {
       help: { type: 'boolean', alias: 'v' },
       version: { type: 'boolean', alias: 'v' },
-      urlBase: { type: 'string', alias: 'u', default: 'http://localhost:5601' }
+      urlBase: { type: 'string', alias: 'u', default: defaultUrlBase }
     }
   }
 
   return meow(meowOptions)
-}
-
-async function kbnAction (uri) {
-
 }
 
 function getHelpText () {
@@ -76,7 +88,7 @@ function getHelpText () {
 usage:
   ${cmd} ls-types
   ${cmd} ls 
-  ${cmd} create <action-type-id> <json: config>
+  ${cmd} create <action-type-id> <description> <json: config>
   ${cmd} get <action-id>
   ${cmd} update <action-id> <json: config>
   ${cmd} delete <action-id>
@@ -86,5 +98,7 @@ options:
   -h --help       print this help
   -v --version    print the version of the program
   -u --urlBase    Kibana base URL
+
+You can also set the env var KBN_ACTION_URLBASE as the Kibana base URL.
 `
 }

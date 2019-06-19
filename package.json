@@ -1,0 +1,36 @@
+{
+  "name": "kbn-action",
+  "version": "1.0.0",
+  "description": "command-line utility for working with Kibana actions",
+  "main": "kbn-action.js",
+  "author": "pmuellr",
+  "bin": {
+    "kbn-action": "kbn-action.js"
+  },
+  "scripts": {
+    "build": "node tools/build.js",
+    "standard": "standard --verbose",
+    "test": "npm run -s standard",
+    "watch": "nodemon --exec 'npm run -s test'"
+  },
+  "homepage": "https://github.com/pmuellr/kbn-action",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pmuellr/kbn-action.git"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "standard": "^12.0.1"
+  },
+  "standard": {
+    "ignore": [
+      "tmp/**/*",
+      "docs/**/*"
+    ]
+  },
+  "dependencies": {
+    "meow": "^5.0.0",
+    "whatwg-fetch": "^3.0.0"
+  }
+}

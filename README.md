@@ -19,6 +19,10 @@ options:
 
 You can also set the env var KBN_ACTION_URLBASE as the Kibana base URL.
 
+## install
+
+    npm install -g pmuellr/kbn-action
+
 ## examples
 
 ```console

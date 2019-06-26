@@ -26,103 +26,113 @@ You can also set the env var KBN_ACTION_URLBASE as the Kibana base URL.
 ## examples
 
 ```console
-$ export KBN_ACTION_URLBASE=http://elastic:changeme@localhost:5603/rzm
+
+$ # point to a running Functional Test Server
+
+$ export KBN_ACTION_URLBASE=http://elastic:changeme@localhost:5620
 
 #-------------------------------------------------------------------------
 
-$ ./kbn-action.js ls-types
+$ kbn-action ls-types
 [
     {
         "id": "kibana.server-log",
         "name": "server-log"
     },
     {
-        "id": "kibana.email",
+        "id": ".slack",
+        "name": "slack"
+    },
+    {
+        "id": ".email",
         "name": "email"
     }
 ]
-
 #-------------------------------------------------------------------------
 
-$ ./kbn-action.js create kibana.email "pmuellr email" '{"host":"smtp.gmail.com", "port":465, "user": "{redacted}", "password": "{redacted}"}'
+$ kbn-action create .slack "pmuellr slack" '{"webhookUrl": "https://hooks.slack.com/services/T0CUZ52US/BJWC6520H/{redacted}"}'
 {
     "type": "action",
-    "id": "e680a0bf-578a-42f0-a9b7-c90a7606d55c",
+    "id": "d6f1e228-1806-4a72-83ac-e06f3d5c2fbe",
     "attributes": {
-        "actionTypeId": "kibana.email",
-        "description": "pmuellr email",
+        "actionTypeId": ".slack",
+        "description": "pmuellr slack",
         "actionTypeConfig": {}
     },
     "references": [],
-    "updated_at": "2019-06-19T21:55:56.190Z",
+    "updated_at": "2019-06-26T17:55:42.728Z",
     "version": "WzMsMV0="
 }
 
 #-------------------------------------------------------------------------
 
-$ ./kbn-action.js ls
+$ kbn-action create .email "pmuellr email" '{"service": "gmail", "user": "pmuellr", "password":"{redacted}", "from": "pmuellr@gmail.com"}'
+{
+    "type": "action",
+    "id": "7db3f1a7-ebac-48b0-a0ce-7a76513ca521",
+    "attributes": {
+        "actionTypeId": ".email",
+        "description": "pmuellr email",
+        "actionTypeConfig": {}
+    },
+    "references": [],
+    "updated_at": "2019-06-26T18:00:01.155Z",
+    "version": "WzQsMV0="
+}
+
+#-------------------------------------------------------------------------
+
+$ kbn-action ls
 {
     "page": 1,
     "per_page": 20,
-    "total": 1,
+    "total": 2,
     "saved_objects": [
         {
             "type": "action",
-            "id": "e680a0bf-578a-42f0-a9b7-c90a7606d55c",
+            "id": "d6f1e228-1806-4a72-83ac-e06f3d5c2fbe",
             "attributes": {
-                "actionTypeId": "kibana.email",
+                "actionTypeId": ".slack",
+                "description": "pmuellr slack",
+                "actionTypeConfig": {}
+            },
+            "references": [],
+            "updated_at": "2019-06-26T17:55:42.728Z",
+            "version": "WzMsMV0="
+        },
+        {
+            "type": "action",
+            "id": "7db3f1a7-ebac-48b0-a0ce-7a76513ca521",
+            "attributes": {
+                "actionTypeId": ".email",
                 "description": "pmuellr email",
                 "actionTypeConfig": {}
             },
             "references": [],
-            "updated_at": "2019-06-19T21:55:56.190Z",
-            "version": "WzMsMV0="
+            "updated_at": "2019-06-26T18:00:01.155Z",
+            "version": "WzQsMV0="
         }
     ]
 }
 
 #-------------------------------------------------------------------------
 
-$ ./kbn-action.js get e680a0bf-578a-42f0-a9b7-c90a7606d55c
-{
-    "id": "e680a0bf-578a-42f0-a9b7-c90a7606d55c",
-    "type": "action",
-    "updated_at": "2019-06-19T21:55:56.190Z",
-    "version": "WzMsMV0=",
-    "attributes": {
-        "actionTypeId": "kibana.email",
-        "description": "pmuellr email",
-        "actionTypeConfig": {}
-    },
-    "references": []
-}
+$ # post a message to slack
+
+$ kbn-action fire d6f1e228-1806-4a72-83ac-e06f3d5c2fbe '{"message": "hello from the cli using kbn-action"}'
+kbn-action: status code 204
+body: ""
 
 #-------------------------------------------------------------------------
 
-$ ./kbn-action.js update e680a0bf-578a-42f0-a9b7-c90a7606d55c "pmuellr email 2" '{"host":"smtp.gmail.com", "port":465, "user": "{redacted}", "password": "{redacted}"}'
-{
-    "id": "e680a0bf-578a-42f0-a9b7-c90a7606d55c",
-    "type": "action",
-    "updated_at": "2019-06-19T22:05:44.103Z",
-    "version": "WzQsMV0=",
-    "references": [],
-    "attributes": {
-        "description": "pmuellr email 2",
-        "actionTypeConfig": {},
-        "actionTypeId": "kibana.email"
-    }
-}
+$ # send an email
+
+$ kbn-action fire 7db3f1a7-ebac-48b0-a0ce-7a76513ca521 '{"to": ["patrick.mueller@elastic.co"], "cc": ["mike.cote@elastic.co"], "subject": "hi", "message": "hello from the cli using kbn-action"}'
+kbn-action: status code 204
+body: ""
 
 #-------------------------------------------------------------------------
 
-$ ./kbn-action.js fire
-kbn-action: Error: not yet implemented
-    at Object.fire (/Users/pmuellr/Projects/elastic/kbn-action/lib/commands.js:96:9)
-    at main (/Users/pmuellr/Projects/elastic/kbn-action/kbn-action.js:41:37)
-    ...
-
-#-------------------------------------------------------------------------
-
-$ ./kbn-action.js delete e680a0bf-578a-42f0-a9b7-c90a7606d55c
+$ kbn-action delete 7db3f1a7-ebac-48b0-a0ce-7a76513ca521
 {}
 ```

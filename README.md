@@ -1,4 +1,4 @@
-command-line utility for working with Kibana actions
+command-line utilities for working with Kibana actions and alerts
 ===============================================================================
 
 ## usage
@@ -11,13 +11,27 @@ command-line utility for working with Kibana actions
     kbn-action delete <action-id>
     kbn-action fire <action-id> <json: params>
 
+    kbn-alert ls-types
+    kbn-alert ls
+    kbn-alert create <alert-type-id> <interval> <json: params> <json: actions>
+    kbn-alert get <alert-id>
+    kbn-alert update <alert-id> <interval> <json: params> <json: actions>
+    kbn-alert delete <alert-id>
+
+Note that for `kbn-alert` subcommands `create` and `update`, the `actions`
+parameter should be an array of actions.  However, you can pass a single
+object, and that will be used as an array of that element.
+
 options:
 
     -h --help       print this help
     -v --version    print the version of the program
     -u --urlBase    Kibana base URL
 
-You can also set the env var KBN_ACTION_URLBASE as the Kibana base URL.
+You can also set the env var KBN_URLBASE as the Kibana base URL.
+
+For the JSON args, the argument should be a single argument (thus, quoted),
+and can be "sloppy" via https://github.com/pmuellr/sloppy_json_parse . 
 
 ## install
 
@@ -29,7 +43,7 @@ You can also set the env var KBN_ACTION_URLBASE as the Kibana base URL.
 
 $ # point to a running Functional Test Server
 
-$ export KBN_ACTION_URLBASE=http://elastic:changeme@localhost:5620
+$ export KBN_URLBASE=http://elastic:changeme@localhost:5620
 
 #-------------------------------------------------------------------------
 
@@ -66,7 +80,7 @@ $ kbn-action create .slack "pmuellr slack" '{"webhookUrl": "https://hooks.slack.
 
 #-------------------------------------------------------------------------
 
-$ kbn-action create .email "pmuellr email" '{"service": "gmail", "user": "pmuellr", "password":"{redacted}", "from": "pmuellr@gmail.com"}'
+$ kbn-action create .email "pmuellr email" '{service:gmail, user:pmuellr, password:REDACTED, from:"pmuellr@gmail.com"}'
 {
     "type": "action",
     "id": "7db3f1a7-ebac-48b0-a0ce-7a76513ca521",

@@ -5,7 +5,8 @@
   "main": "kbn-action.js",
   "author": "pmuellr",
   "bin": {
-    "kbn-action": "kbn-action.js"
+    "kbn-action": "kbn-action.js",
+    "kbn-alert": "kbn-alert.js"
   },
   "scripts": {
     "build": "node tools/build.js",

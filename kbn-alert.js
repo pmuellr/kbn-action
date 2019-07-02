@@ -12,7 +12,7 @@ module.exports = {
 
 const meow = require('meow')
 
-const commands = require('./lib/action-commands')
+const commands = require('./lib/alert-commands')
 
 const PROGRAM = path.basename(__filename)
 
@@ -122,11 +122,10 @@ function getHelpText () {
 usage:
   ${PROGRAM} ls-types
   ${PROGRAM} ls 
-  ${PROGRAM} create <action-type-id> <description> <json: config>
-  ${PROGRAM} get <action-id>
-  ${PROGRAM} update <action-id> <description> <json: config>
-  ${PROGRAM} delete <action-id>
-  ${PROGRAM} fire <action-id> <json: params>
+  ${PROGRAM} create <alert-type-id> <interval> <json: params> <json: actions>
+  ${PROGRAM} get <alert-id>
+  ${PROGRAM} update <alert-id> <interval> <json: params> <json: actions>
+  ${PROGRAM} delete <alert-id>
 
 options:
   -h --help       print this help

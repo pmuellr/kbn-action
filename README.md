@@ -31,7 +31,7 @@ options:
 You can also set the env var KBN_URLBASE as the Kibana base URL.
 
 For the JSON args, the argument should be a single argument (thus, quoted),
-and can be "sloppy" via https://github.com/pmuellr/sloppy_json_parse . 
+and can be "sloppy" via https://github.com/pmuellr/sloppy-json . 
 
 ## install
 
@@ -147,6 +147,28 @@ body: ""
 
 #-------------------------------------------------------------------------
 
+$ # delete an action
+
 $ kbn-action delete 7db3f1a7-ebac-48b0-a0ce-7a76513ca521
 {}
+
+#-------------------------------------------------------------------------
+
+$ # alerts are similar to actions, create being wildly different
+
+$ kbn-alert create test.noop 1000s '{}' '[{group:default id:x params:{}}]'
+{
+    "id": "1cb56250-a2cf-11e9-b4b4-a78f39bed4a0",
+    "alertTypeId": "test.noop",
+    "interval": "1000s",
+    "actions": [
+        {
+            "group": "default",
+            "params": {},
+            "id": "x"
+        }
+    ],
+    "alertTypeParams": {},
+    "scheduledTaskId": "BEE92msBpIwDqE1LrQn6"
+}
 ```

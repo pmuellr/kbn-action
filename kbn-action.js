@@ -122,9 +122,9 @@ function getHelpText () {
 usage:
   ${PROGRAM} ls-types
   ${PROGRAM} ls 
-  ${PROGRAM} create <action-type-id> <description> <json: config>
+  ${PROGRAM} create <action-type-id> <description> <json: config> <json: secrets>
   ${PROGRAM} get <action-id>
-  ${PROGRAM} update <action-id> <description> <json: config>
+  ${PROGRAM} update <action-id> <description> <json: config> <json: secrets>
   ${PROGRAM} delete <action-id>
   ${PROGRAM} fire <action-id> <json: params>
 

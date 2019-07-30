@@ -5,9 +5,9 @@ command-line utilities for working with Kibana actions and alerts
 
     kbn-action ls-types
     kbn-action ls
-    kbn-action create <action-type-id> <description> <json: config>
+    kbn-action create <action-type-id> <description> <json: config> <json: secrets>
     kbn-action get <action-id>
-    kbn-action update <action-id> <json: config>
+    kbn-action update <action-id> <description> <json: config> <json: secrets>
     kbn-action delete <action-id>
     kbn-action fire <action-id> <json: params>
 
@@ -47,10 +47,12 @@ $ export KBN_URLBASE=http://elastic:changeme@localhost:5620
 
 #-------------------------------------------------------------------------
 
+$ # list the action types
+
 $ kbn-action ls-types
 [
     {
-        "id": "kibana.server-log",
+        "id": ".server-log",
         "name": "server-log"
     },
     {
@@ -60,115 +62,139 @@ $ kbn-action ls-types
     {
         "id": ".email",
         "name": "email"
+    },
+    {
+        "id": ".index",
+        "name": "index"
     }
 ]
+
 #-------------------------------------------------------------------------
 
-$ kbn-action create .slack "pmuellr slack" '{"webhookUrl": "https://hooks.slack.com/services/T0CUZ52US/BJWC6520H/{redacted}"}'
+$ # create an email action with the __json service, that just echos input
+
+$ kbn-action create .email "email test" '{from:"pmuellr@gmail.com" service:__json}' '{user:ignored password:ignored}'
 {
-    "type": "action",
-    "id": "d6f1e228-1806-4a72-83ac-e06f3d5c2fbe",
-    "attributes": {
-        "actionTypeId": ".slack",
-        "description": "pmuellr slack",
-        "actionTypeConfig": {}
-    },
-    "references": [],
-    "updated_at": "2019-06-26T17:55:42.728Z",
-    "version": "WzMsMV0="
+    "id": "52e8571e-948e-4a94-9951-55fb660bb787"
 }
 
 #-------------------------------------------------------------------------
 
-$ kbn-action create .email "pmuellr email" '{service:gmail, user:pmuellr, password:REDACTED, from:"pmuellr@gmail.com"}'
-{
-    "type": "action",
-    "id": "7db3f1a7-ebac-48b0-a0ce-7a76513ca521",
-    "attributes": {
-        "actionTypeId": ".email",
-        "description": "pmuellr email",
-        "actionTypeConfig": {}
-    },
-    "references": [],
-    "updated_at": "2019-06-26T18:00:01.155Z",
-    "version": "WzQsMV0="
-}
+$ # fire the new email action
 
-#-------------------------------------------------------------------------
-
-$ kbn-action ls
+$ kbn-action fire 52e8571e-948e-4a94-9951-55fb660bb787 '{to:["pmuellr@gmail.com"] subject:hallo message:"# hello\n_italic_ **bold**"}'
 {
-    "page": 1,
-    "per_page": 20,
-    "total": 2,
-    "saved_objects": [
-        {
-            "type": "action",
-            "id": "d6f1e228-1806-4a72-83ac-e06f3d5c2fbe",
-            "attributes": {
-                "actionTypeId": ".slack",
-                "description": "pmuellr slack",
-                "actionTypeConfig": {}
-            },
-            "references": [],
-            "updated_at": "2019-06-26T17:55:42.728Z",
-            "version": "WzMsMV0="
+    "status": "ok",
+    "data": {
+        "envelope": {
+            "from": "pmuellr@gmail.com",
+            "to": [
+                "pmuellr@gmail.com"
+            ]
         },
-        {
-            "type": "action",
-            "id": "7db3f1a7-ebac-48b0-a0ce-7a76513ca521",
-            "attributes": {
-                "actionTypeId": ".email",
-                "description": "pmuellr email",
-                "actionTypeConfig": {}
+        "messageId": "<54650a90-95d3-bf93-5831-1db3772f9316@gmail.com>",
+        "message": {
+            "from": {
+                "address": "pmuellr@gmail.com",
+                "name": ""
             },
-            "references": [],
-            "updated_at": "2019-06-26T18:00:01.155Z",
-            "version": "WzQsMV0="
+            "to": [
+                {
+                    "address": "pmuellr@gmail.com",
+                    "name": ""
+                }
+            ],
+            "cc": null,
+            "bcc": null,
+            "subject": "hallo",
+            "html": "<h1>hello</h1>\n<p><em>italic</em> <strong>bold</strong></p>\n",
+            "text": "# hello\n_italic_ **bold**",
+            "headers": {},
+            "messageId": "<54650a90-95d3-bf93-5831-1db3772f9316@gmail.com>"
         }
-    ]
+    }
 }
 
 #-------------------------------------------------------------------------
 
-$ # post a message to slack
+$ # create a server log action to use with an alert
 
-$ kbn-action fire d6f1e228-1806-4a72-83ac-e06f3d5c2fbe '{"message": "hello from the cli using kbn-action"}'
-kbn-action: status code 204
-body: ""
-
-#-------------------------------------------------------------------------
-
-$ # send an email
-
-$ kbn-action fire 7db3f1a7-ebac-48b0-a0ce-7a76513ca521 '{"to": ["patrick.mueller@elastic.co"], "cc": ["mike.cote@elastic.co"], "subject": "hi", "message": "hello from the cli using kbn-action"}'
-kbn-action: status code 204
-body: ""
+$ kbn-action create .server-log "server log" {} {}
+{
+    "id": "8fe59625-fda4-400b-94a6-cf75938c163b"
+}
 
 #-------------------------------------------------------------------------
 
-$ # delete an action
+$ # list alert types, from a functional test server
 
-$ kbn-action delete 7db3f1a7-ebac-48b0-a0ce-7a76513ca521
-{}
+$ kbn-alert ls-types
+[
+    {
+        "id": "test.always-firing",
+        "name": "Test: Always Firing"
+    },
+    ...
+]
 
 #-------------------------------------------------------------------------
 
 $ # alerts are similar to actions, create being wildly different
 
-$ kbn-alert create test.noop 1000s '{}' '[{group:default id:x params:{}}]'
+$ kbn-alert create test.always-firing 1s '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1s'}}]"
 {
-    "id": "1cb56250-a2cf-11e9-b4b4-a78f39bed4a0",
-    "alertTypeId": "test.noop",
-    "interval": "1000s",
+    "id": "0bdbb930-b485-11e9-86c5-c9b4ac6d5f40",
+    "alertTypeId": "test.always-firing",
+    "interval": "1s",
     "actions": [
         {
             "group": "default",
-            "params": {},
-            "id": "x"
+            "params": {
+                "message": "from alert 1s"
+            },
+            "id": "8fe59625-fda4-400b-94a6-cf75938c163b"
         }
     ],
-    "alertTypeParams": {},
-    "scheduledTaskId": "BEE92msBpIwDqE1LrQn6"
+    "alertTypeParams": {
+        "index": "test_alert_from_cli"
+    },
+    "enabled": true,
+    "scheduledTaskId": "0c031750-b485-11e9-86c5-c9b4ac6d5f40"
+}
+
+#-------------------------------------------------------------------------
+
+$ # update the alert to run every minute instead of every second
+
+$ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 1m '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1m'}}]"
+{
+    "id": "0bdbb930-b485-11e9-86c5-c9b4ac6d5f40",
+    "interval": "1m",
+    "actions": [
+        {
+            "group": "default",
+            "params": {
+                "message": "from alert 1m"
+            },
+            "id": "8fe59625-fda4-400b-94a6-cf75938c163b"
+        }
+    ],
+    "alertTypeParams": {
+        "index": "test_alert_from_cli"
+    }
 }
 ```
+
+## change log
+
+#### 1.2.0 - 2019-08-01
+
+- update to apis at master, using new http bodies for actions
+
+#### 1.1.0 - 2019-??-??
+
+- some fixes
+
+#### 1.0.0 - 2019-??-??
+
+- initial release

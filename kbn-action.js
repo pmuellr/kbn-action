@@ -126,7 +126,7 @@ usage:
   ${PROGRAM} get <action-id>
   ${PROGRAM} update <action-id> <description> <json: config> <json: secrets>
   ${PROGRAM} delete <action-id>
-  ${PROGRAM} fire <action-id> <json: params>
+  ${PROGRAM} execute <action-id> <json: params>
 
 options:
   -h --help       print this help

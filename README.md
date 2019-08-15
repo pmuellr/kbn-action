@@ -9,7 +9,7 @@ command-line utilities for working with Kibana actions and alerts
     kbn-action get <action-id>
     kbn-action update <action-id> <description> <json: config> <json: secrets>
     kbn-action delete <action-id>
-    kbn-action fire <action-id> <json: params>
+    kbn-action execute <action-id> <json: params>
 
     kbn-alert ls-types
     kbn-alert ls
@@ -80,9 +80,9 @@ $ kbn-action create .email "email test" '{from:"pmuellr@gmail.com" service:__jso
 
 #-------------------------------------------------------------------------
 
-$ # fire the new email action
+$ # execute the new email action
 
-$ kbn-action fire 52e8571e-948e-4a94-9951-55fb660bb787 '{to:["pmuellr@gmail.com"] subject:hallo message:"# hello\n_italic_ **bold**"}'
+$ kbn-action execute 52e8571e-948e-4a94-9951-55fb660bb787 '{to:["pmuellr@gmail.com"] subject:hallo message:"# hello\n_italic_ **bold**"}'
 {
     "status": "ok",
     "data": {

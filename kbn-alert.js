@@ -16,6 +16,8 @@ const commands = require('./lib/alert-commands')
 
 const PROGRAM = path.basename(__filename)
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 if (require.main === module) main()
 
 // main cli function
@@ -28,13 +30,13 @@ async function main () {
   if (flags.version) args.showVersion()
 
   const urlBase = flags.urlBase.replace(/\/+$/, '')
-  const [ command, id, ...rest ] = input
+  const [command, id, ...rest] = input
 
   debugLog(`command: ${command} id: ${id}`)
   debugLog(`rest:    ${rest.join(' ')}`)
   debugLog(`flags:   ${JSON.stringify(flags)}`)
 
-  if (!commands.hasOwnProperty(command)) {
+  if (commands[command] == null) {
     logError(`unknown command: ${command}`)
   }
 
@@ -79,7 +81,7 @@ function debugLogRequest (result) {
       if (result.request.gotOptions) {
         const headers = result.request.gotOptions.headers || {}
         const printedRequestHeaders = new Set(['kbn-xsrf', 'content-type'])
-        for (let name in headers) {
+        for (const name in headers) {
           if (!printedRequestHeaders.has(name)) continue
           debugLog(`http request header ${name}: ${headers[name]}`)
         }

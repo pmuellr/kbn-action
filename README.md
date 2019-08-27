@@ -27,6 +27,7 @@ options:
     -h --help       print this help
     -v --version    print the version of the program
     -u --urlBase    Kibana base URL
+    -s --space      Kibana space to use; default: default
 
 You can also set the env var KBN_URLBASE as the Kibana base URL.
 

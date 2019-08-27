@@ -12,6 +12,7 @@ module.exports = {
 
 const meow = require('meow')
 
+const baseUrl = require('./lib/base-url')
 const commands = require('./lib/alert-commands')
 
 const PROGRAM = path.basename(__filename)
@@ -29,7 +30,7 @@ async function main () {
   if (flags.help) args.showHelp()
   if (flags.version) args.showVersion()
 
-  const urlBase = flags.urlBase.replace(/\/+$/, '')
+  const urlBase = baseUrl.fromFlags(flags)
   const [command, id, ...rest] = input
 
   debugLog(`command: ${command} id: ${id}`)
@@ -66,6 +67,10 @@ async function main () {
     }
 
     logError(`redirected to ${redirect}`)
+  }
+
+  if (result.statusCode === 204) {
+    return
   }
 
   if (result.statusCode !== 200) {
@@ -106,12 +111,13 @@ function getDebugLog () {
 
 // returns parsed args from meow
 function parseArgs () {
-  const defaultUrlBase = process.env.KBN_URLBASE || 'http://localhost:5601'
+  const defaultUrlBase = process.env.KBN_URLBASE || baseUrl.DefaultURL
   const meowOptions = {
     help: getHelpText(),
     flags: {
       help: { type: 'boolean', alias: 'v' },
       version: { type: 'boolean', alias: 'v' },
+      space: { type: 'string', alias: 's', default: baseUrl.DefaultSpace },
       urlBase: { type: 'string', alias: 'u', default: defaultUrlBase }
     }
   }
@@ -133,6 +139,7 @@ options:
   -h --help       print this help
   -v --version    print the version of the program
   -u --urlBase    Kibana base URL
+  -s --space      Kibana space to use; default: default
 
 You can also set the env var KBN_URLBASE as the Kibana base URL.
 

@@ -30,6 +30,8 @@ options:
 
 You can also set the env var KBN_URLBASE as the Kibana base URL.
 
+Set the DEBUG environment variable to anything to get diagnostic output.
+
 For the JSON args, the argument should be a single argument (thus, quoted),
 and can be "sloppy" via https://github.com/pmuellr/sloppy-json . 
 

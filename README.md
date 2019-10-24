@@ -13,9 +13,9 @@ command-line utilities for working with Kibana actions and alerts
 
     kbn-alert ls-types
     kbn-alert ls
-    kbn-alert create <alert-type-id> <interval> <json: params> <json: actions>
+    kbn-alert create <alert-type-id> <name> <interval> <json: params> <json: actions>
     kbn-alert get <alert-id>
-    kbn-alert update <alert-id> <interval> <json: params> <json: actions>
+    kbn-alert update <alert-id> <name> <interval> <json: params> <json: actions> <throttle>
     kbn-alert delete <alert-id>
 
 Note that for `kbn-alert` subcommands `create` and `update`, the `actions`
@@ -144,9 +144,10 @@ $ kbn-alert ls-types
 
 $ # alerts are similar to actions, create being wildly different
 
-$ kbn-alert create test.always-firing 1s '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1s'}}]"
+$ kbn-alert create test.always-firing test 1s '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1s'}}]"
 {
     "id": "0bdbb930-b485-11e9-86c5-c9b4ac6d5f40",
+    "name": "test",
     "alertTypeId": "test.always-firing",
     "interval": "1s",
     "actions": [
@@ -169,9 +170,11 @@ $ kbn-alert create test.always-firing 1s '{index:test_alert_from_cli}' "[{group:
 
 $ # update the alert to run every minute instead of every second
 
-$ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 1m '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1m'}}]"
+$ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1m'}}]" 5m
 {
     "id": "0bdbb930-b485-11e9-86c5-c9b4ac6d5f40",
+    "name": "updated test"
+    "throttle": "5m",
     "interval": "1m",
     "actions": [
         {

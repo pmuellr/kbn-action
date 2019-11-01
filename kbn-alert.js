@@ -130,9 +130,9 @@ function getHelpText () {
 usage:
   ${PROGRAM} ls-types
   ${PROGRAM} ls 
-  ${PROGRAM} create <alert-type-id> <interval> <json: params> <json: actions>
+  ${PROGRAM} create <alert-type-id> <name> <interval> <json: params> <json: actions>
   ${PROGRAM} get <alert-id>
-  ${PROGRAM} update <alert-id> <interval> <json: params> <json: actions>
+  ${PROGRAM} update <alert-id> <name> <interval> <json: params> <json: actions> <throttle>
   ${PROGRAM} delete <alert-id>
 
 options:

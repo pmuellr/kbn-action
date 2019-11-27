@@ -144,7 +144,7 @@ $ kbn-alert ls-types
 
 $ # alerts are similar to actions, create being wildly different
 
-$ kbn-alert create test.always-firing test 1s '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1s'}}]"
+$ kbn-alert create test.always-firing test 1s '{index:test_alert_from_cli}' "[{group:default id:'8fe59625-fda4-400b-94a6-cf75938c163b' params:{message: 'from alert 1s', level: 'warn'}}]"
 {
     "id": "0bdbb930-b485-11e9-86c5-c9b4ac6d5f40",
     "name": "test",
@@ -154,7 +154,8 @@ $ kbn-alert create test.always-firing test 1s '{index:test_alert_from_cli}' "[{g
         {
             "group": "default",
             "params": {
-                "message": "from alert 1s"
+                "message": "from alert 1s",
+                "level": "warn"
             },
             "id": "8fe59625-fda4-400b-94a6-cf75938c163b"
         }

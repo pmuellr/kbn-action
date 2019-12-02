@@ -159,7 +159,7 @@ $ kbn-alert create test.always-firing test 1s '{index:test_alert_from_cli}' "[{g
             "id": "8fe59625-fda4-400b-94a6-cf75938c163b"
         }
     ],
-    "alertTypeParams": {
+    "params": {
         "index": "test_alert_from_cli"
     },
     "enabled": true,
@@ -185,7 +185,7 @@ $ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{inde
             "id": "8fe59625-fda4-400b-94a6-cf75938c163b"
         }
     ],
-    "alertTypeParams": {
+    "params": {
         "index": "test_alert_from_cli"
     }
 }

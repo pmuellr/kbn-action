@@ -5,9 +5,9 @@ command-line utilities for working with Kibana actions and alerts
 
     kbn-action ls-types
     kbn-action ls
-    kbn-action create <action-type-id> <description> <json: config> <json: secrets>
+    kbn-action create <action-type-id> <name> <json: config> <json: secrets>
     kbn-action get <action-id>
-    kbn-action update <action-id> <description> <json: config> <json: secrets>
+    kbn-action update <action-id> <name> <json: config> <json: secrets>
     kbn-action delete <action-id>
     kbn-action execute <action-id> <json: params>
 

@@ -19,6 +19,7 @@ const PROGRAM = path.basename(__filename)
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
+// @ts-ignore
 if (require.main === module) main()
 
 // main cli function
@@ -41,7 +42,7 @@ async function main () {
     logError(`unknown command: ${command}`)
   }
 
-  const opts = { debugLog }
+  const opts = { debugLog, ...flags }
   let result
   try {
     result = await commands[command](urlBase, id, rest, opts)
@@ -100,6 +101,7 @@ function logError (message) {
   process.exit(1)
 }
 
+/** @type { () => ((message: string) => void) } */
 function getDebugLog () {
   if (process.env.DEBUG == null) return () => {}
 
@@ -118,11 +120,22 @@ function parseArgs () {
       help: { type: 'boolean', alias: 'v' },
       version: { type: 'boolean', alias: 'v' },
       space: { type: 'string', alias: 's', default: baseUrl.DefaultSpace },
-      urlBase: { type: 'string', alias: 'u', default: defaultUrlBase }
+      urlBase: { type: 'string', alias: 'u', default: defaultUrlBase },
+      tags: { type: 'string', default: '' },
+      consumer: { type: 'string', default: 'kbn-alert' },
     }
   }
 
-  return meow(meowOptions)
+  // @ts-ignore
+  const meowResponse = meow(meowOptions)
+  if (meowResponse.flags.tags != null) {
+    meowResponse.flags.tags = meowResponse.flags.tags
+      .split(/,/g)
+      .map(tag => tag.trim())
+      .filter(tag => !!tag)
+  }
+
+  return meowResponse
 }
 
 function getHelpText () {
@@ -130,9 +143,9 @@ function getHelpText () {
 usage:
   ${PROGRAM} ls-types
   ${PROGRAM} ls 
-  ${PROGRAM} create <alert-type-id> <name> <interval> <json: params> <json: actions>
+  ${PROGRAM} create <alert-type-id> <name> <interval> <json: params> <json: actions> [--consumer XXX] [--tags X,Y,Z]
   ${PROGRAM} get <alert-id>
-  ${PROGRAM} update <alert-id> <name> <interval> <json: params> <json: actions> <throttle>
+  ${PROGRAM} update <alert-id> <name> <interval> <json: params> <json: actions> <throttle> [--tags X,Y,Z]
   ${PROGRAM} delete <alert-id>
 
 options:
@@ -144,6 +157,12 @@ options:
 You can also set the env var KBN_URLBASE as the Kibana base URL.
 
 Set the DEBUG environment variable to any string for additional diagnostics.
+
+For "create", if the "--consumer" option value is not set, it will default to
+"kbn-alert".
+
+The "--tags" option value should be a comma-separated list of tags, defaulting
+to an empty list.
 
 For authenticated Kibana access, the url should include the userid/password,
 for example "http://elastic:changeme@localhost:5620"

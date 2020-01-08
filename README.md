@@ -13,9 +13,9 @@ command-line utilities for working with Kibana actions and alerts
 
     kbn-alert ls-types
     kbn-alert ls
-    kbn-alert create <alert-type-id> <name> <interval> <json: params> <json: actions>
+    kbn-alert create <alert-type-id> <name> <interval> <json: params> <json: actions> [--consumer XXX] [--tags X,Y,Z]
     kbn-alert get <alert-id>
-    kbn-alert update <alert-id> <name> <interval> <json: params> <json: actions> <throttle>
+    kbn-alert update <alert-id> <name> <interval> <json: params> <json: actions> <throttle> [--tags X,Y,Z]
     kbn-alert delete <alert-id>
 
 Note that for `kbn-alert` subcommands `create` and `update`, the `actions`
@@ -193,6 +193,10 @@ $ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{inde
 ```
 
 ## change log
+
+#### 1.3.0 - 2020-01-08
+
+- change to support Kibana 7.6 alerting / actions APIs
 
 #### 1.2.0 - 2019-08-01
 

@@ -19,6 +19,7 @@ const PROGRAM = path.basename(__filename)
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
+// @ts-ignore
 if (require.main === module) main()
 
 // main cli function
@@ -100,6 +101,7 @@ function logError (message) {
   process.exit(1)
 }
 
+/** @type { () => ((message: string) => void) } */
 function getDebugLog () {
   if (process.env.DEBUG == null) return () => {}
 
@@ -122,6 +124,7 @@ function parseArgs () {
     }
   }
 
+  // @ts-ignore
   return meow(meowOptions)
 }
 

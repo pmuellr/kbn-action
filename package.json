@@ -1,6 +1,6 @@
 {
   "name": "kbn-action",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "command-line utility for working with Kibana actions",
   "main": "kbn-action.js",
   "author": "pmuellr",
@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "got": "^10.2.1",
-    "meow": "^6.0.0",
-    "sloppy-json": "pmuellr/sloppy-json"
+    "hjson": "^3.2.1",
+    "meow": "^6.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",

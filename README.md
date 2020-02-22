@@ -34,7 +34,7 @@ You can also set the env var KBN_URLBASE as the Kibana base URL.
 Set the DEBUG environment variable to anything to get diagnostic output.
 
 For the JSON args, the argument should be a single argument (thus, quoted),
-and can be "sloppy" via https://github.com/pmuellr/sloppy-json . 
+and is parsed as [hJSON](https://www.npmjs.com/package/hjson). 
 
 ## install
 
@@ -193,6 +193,10 @@ $ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{inde
 ```
 
 ## change log
+
+#### 1.4.0 - 2020-02-22
+
+- change to use `hjson` instead of `sloppy-json`
 
 #### 1.3.0 - 2020-01-08
 

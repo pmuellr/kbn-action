@@ -5,6 +5,7 @@
   "main": "kbn-action.js",
   "author": "pmuellr",
   "bin": {
+    "kbn-el": "kbn-el.js",
     "kbn-action": "kbn-action.js",
     "kbn-alert": "kbn-alert.js"
   },

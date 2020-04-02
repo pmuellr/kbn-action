@@ -21,6 +21,7 @@
     "url": "https://github.com/pmuellr/kbn-action.git"
   },
   "dependencies": {
+    "chalk": "^3.0.0",
     "got": "^10.2.1",
     "hjson": "^3.2.1",
     "meow": "^6.0.0"

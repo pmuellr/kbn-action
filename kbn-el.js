@@ -40,7 +40,7 @@ async function main () {
     command = 'es'
   }
 
-  if (!command) command = 'all'
+  if (!command) args.showHelp()
 
   if (command == 'action' && !commandArg) {
     logError('the action command requires an action id argument')
@@ -57,7 +57,9 @@ async function main () {
   debugLog(`command: ${command}${commandArg ? ` ${commandArg}` : ''}`)
   debugLog(`flags:   ${JSON.stringify(flags)}`)
 
+  debugLog(`start/end flags:      ${JSON.stringify({startDate: flags.startDate, endDate: flags.endDate, duration: flags.duration})}`)
   const { startDate, endDate } = getDatesFromFlags(flags.startDate, flags.endDate, flags.duration)
+  debugLog(`start/end calculated: ${JSON.stringify({startDate: new Date(startDate), endDate: new Date(endDate)})}`)
 
   const opts = { debugLog, ...flags }
   opts.startDate = new Date(startDate).toISOString()
@@ -159,7 +161,7 @@ function parseArgs () {
 }
 
 function getDatesFromFlags(startDateFlag, endDateFlag, durationFlag) {
-  let duration = 1000 * 60 * 60
+  let duration = 1000 * 60 * 10 // 10 minutes
   let endDate = Date.now()
   let startDate = endDate - duration
 
@@ -190,6 +192,11 @@ function getDatesFromFlags(startDateFlag, endDateFlag, durationFlag) {
   else if (endDateFlag) {
     startDate = endDateFlag - duration
     endDate = endDateFlag
+  }
+
+  else if (durationFlag) {
+    startDate = Date.now() - durationFlag
+    endDate = Date.now()
   }
 
   if (startDate > endDate) {
@@ -243,7 +250,6 @@ function getHelpText () {
 write Kibana event log entries to stdout
 
 usage:
-  ${PROGRAM}
   ${PROGRAM} all
   ${PROGRAM} actions
   ${PROGRAM} action <action-id>
@@ -256,9 +262,17 @@ options:
   -u --urlBase  <url>     Kibana base URL
   -s --space <space>      Kibana space to use; default: default
      --es <es-url>        return raw data from elasticsearch
-  -j --json               return data as lines of json strings
+  -b --startDate <date>   start date of search
+  -e --endDate <date>     end date of search
+  -d --duration <time>    duration of search
 
 You can also set the env var KBN_URLBASE as the Kibana base URL.
+
+The default endDate is now, the default duration is 10 minutes, and the
+default startDate is 10 minutes before now.  The time should be specified
+as a string of digits followed by a unit character s, m, h, d (for seconds
+minutes, hours, days).  The date can be any date parseable with Date.parse()
+or a time in the duration format (duration before now).
 
 By default, output is generated as ansi-colored lines with chalk, so you can use
 the environment variable FORCE_COLOR=0 to not generate ansi sequences, or use

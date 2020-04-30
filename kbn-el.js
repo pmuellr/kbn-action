@@ -131,7 +131,7 @@ function getDurationString(duration) {
 
 function getSOs(savedObjects) {
   if (savedObjects == null) return []
-  return savedObjects.map(so => `${so.type}:${so.id.substr(0,4)}`)
+  return savedObjects.map(so => `${so.type}:${so.id}`)
 }
 
 function logError (message) {
@@ -276,6 +276,7 @@ options:
   -b --startDate <date>   start date of search
   -e --endDate <date>     end date of search
   -d --duration <time>    duration of search
+  -j --json               write events as lines of JSON
 
 You can also set the env var KBN_URLBASE as the Kibana base URL.
 

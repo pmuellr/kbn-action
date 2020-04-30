@@ -1,6 +1,10 @@
 command-line utilities for working with Kibana actions and alerts
 ===============================================================================
 
+- `kbn-action` - work with Kibana actions
+- `kbn-alert` - work with Kibana alerts
+- `kbn-el` - query the Kibana alerting event log
+
 ## usage
 
     kbn-action ls-types
@@ -17,6 +21,12 @@ command-line utilities for working with Kibana actions and alerts
     kbn-alert get <alert-id>
     kbn-alert update <alert-id> <name> <interval> <json: params> <json: actions> <throttle> [--tags X,Y,Z]
     kbn-alert delete <alert-id>
+
+    kbn-el all
+    kbn-el actions
+    kbn-el action <action-id>
+    kbn-el alerts
+    kbn-el alert <alert-id>
 
 Note that for `kbn-alert` subcommands `create` and `update`, the `actions`
 parameter should be an array of actions.  However, you can pass a single
@@ -193,6 +203,10 @@ $ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{inde
 ```
 
 ## change log
+
+#### 1.5.0 - 2020-04-30
+
+- add's kbn-el command
 
 #### 1.4.0 - 2020-02-22
 

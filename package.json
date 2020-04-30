@@ -1,6 +1,6 @@
 {
   "name": "kbn-action",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "command-line utility for working with Kibana actions",
   "main": "kbn-action.js",
   "author": "pmuellr",

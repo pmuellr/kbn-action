@@ -72,6 +72,13 @@ async function main () {
     logError(err.message)
   }
 
+  if (flags.json) {
+    for (const eventResult of results) {
+      console.log(JSON.stringify(eventResult))
+    }
+    return
+  }
+
   const providerColor = getColoror()
   const actionColor = getColoror(2)
   const iidColor = getColoror(0)
@@ -95,6 +102,10 @@ async function main () {
     parts.push(`sos: ${sos.map(so => soColor(so)).join(', ')}`)
 
     console.log(parts.join(' '))
+
+    if (event.error && event.error.message) {
+      console.log(`    ${event.error.message}`)
+    }
   }
 }
 

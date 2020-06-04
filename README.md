@@ -50,6 +50,16 @@ and is parsed as [hJSON](https://www.npmjs.com/package/hjson).
 
     npm install -g pmuellr/kbn-action
 
+This will install the version at master, which generally works with Kibana
+at master, which generally won't work with older versions of Kibana.  Versions
+for specific Kibana versions are
+[tagged in the git repo](https://github.com/pmuellr/kbn-action/tags).
+
+To install for a specific Kibana version, eg 7.7, use
+
+    npm install -g pmuellr/kbn-action#kibana-7.7
+
+
 ## examples
 
 ```console
@@ -204,8 +214,13 @@ $ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{inde
 
 ## change log
 
+#### 1.6.0 - 2020-06-04
+
+- supports Kibana 7.8
+
 #### 1.5.0 - 2020-04-30
 
+- supports Kibana 7.7
 - add's kbn-el command
 
 #### 1.4.0 - 2020-02-22

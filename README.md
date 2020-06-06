@@ -214,6 +214,10 @@ $ kbn-alert update 0bdbb930-b485-11e9-86c5-c9b4ac6d5f40 'updated test' 1m '{inde
 
 ## change log
 
+#### 1.7.0 - 2020-06-06
+
+- supports Kibana 7.9
+
 #### 1.6.0 - 2020-06-04
 
 - supports Kibana 7.8

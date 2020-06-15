@@ -22,14 +22,14 @@
     "url": "https://github.com/pmuellr/kbn-action.git"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
-    "got": "^10.7.0",
+    "chalk": "^4.1.0",
+    "got": "^11.3.0",
     "hjson": "^3.2.1",
-    "meow": "^6.1.0"
+    "meow": "^7.0.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2",
-    "standard": "^14.3.3"
+    "nodemon": "^2.0.4",
+    "standard": "^14.3.4"
   },
   "standard": {
     "ignore": [

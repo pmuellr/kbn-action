@@ -147,6 +147,8 @@ usage:
   ${PROGRAM} get <alert-id>
   ${PROGRAM} update <alert-id> <name> <interval> <json: params> <json: actions> <throttle> [--tags X,Y,Z]
   ${PROGRAM} delete <alert-id>
+  ${PROGRAM} state <alert-id>
+  ${PROGRAM} status <alert-id>
 
 options:
   -h --help       print this help

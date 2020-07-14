@@ -122,7 +122,7 @@ function parseArgs () {
       space: { type: 'string', alias: 's', default: baseUrl.DefaultSpace },
       urlBase: { type: 'string', alias: 'u', default: defaultUrlBase },
       tags: { type: 'string', default: '' },
-      consumer: { type: 'string', default: 'kbn-alert' },
+      consumer: { type: 'string', default: 'alerts' },
     }
   }
 
